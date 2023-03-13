@@ -44,6 +44,12 @@ public class Servlet extends HttpServlet {
     }
 
     private void showCreateFoodForm(HttpServletRequest request, HttpServletResponse response) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("food/create.jsp");
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showUpdateFoodForm(HttpServletRequest request, HttpServletResponse response) {
