@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+<<<<<<< HEAD
     <file url="file://$PROJECT_DIR$/src/main/java/com/case_study/casemd3/service/food/FoodService.java" dialect="GenericSQL" />
+=======
+    <file url="PROJECT" dialect="MySQL" />
+>>>>>>> f03a3d9e7ed8a061090425ff4369b77375eaad49
   </component>
 </project>
