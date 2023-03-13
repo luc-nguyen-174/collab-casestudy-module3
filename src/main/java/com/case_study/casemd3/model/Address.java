@@ -2,14 +2,14 @@ package com.case_study.casemd3.model;
 
 public class Address {
     private int id;
-    private String address;
+    private String address_name;
 
     public Address() {
     }
 
-    public Address(int id, String address) {
+    public Address(int id, String address_name) {
         this.id = id;
-        this.address = address;
+        this.address_name = address_name;
     }
 
     public int getId() {
@@ -20,11 +20,11 @@ public class Address {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAddress_name() {
+        return address_name;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddress_name(String address_name) {
+        this.address_name = address_name;
     }
 }
