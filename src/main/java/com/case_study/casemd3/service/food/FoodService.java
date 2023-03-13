@@ -17,6 +17,8 @@ public class FoodService implements IFood {
     public static final String SELECT_ALL_FROM_FOOD = "SELECT * FROM food";
     public static final String INSERT_INTO_FOOD = "INSERT INTO food (id,name, price,detail,img_link,certificate)" +
             " values (?,?,?,?,?,?)";
+    public static final String DISABLE_FOOD = "UPDATE food SET is_active = false WHERE id =?";
+    public static final String UPDATE_FOOD_BY_ID = "UPDATE food SET name = ?, price = ?, detail = ?, img_link = ?, certificate = ?, is_active = ? WHERE id = ?";
 
     @Override
     public List<Food> findAll() {
@@ -36,7 +38,8 @@ public class FoodService implements IFood {
                 String details = rs.getString("detail");
                 String img_link = rs.getString("img_link");
                 boolean certificate = rs.getBoolean("certificate");
-                foods.add(new Food(id, name, price, details, img_link, certificate));
+                boolean is_active = rs.getBoolean("is_active");
+                foods.add(new Food(id, name, price, details, img_link, certificate, is_active));
             }
             conn.commit();
         } catch (SQLException e) {
@@ -70,6 +73,7 @@ public class FoodService implements IFood {
             statement.setDouble(3, food.getPrice());
             statement.setString(4, food.getImg_link());
             statement.setBoolean(5, food.isCertificate());
+            statement.setBoolean(6, food.isIs_active());
             statement.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
@@ -86,7 +90,7 @@ public class FoodService implements IFood {
 
     @Override
     public Food findById(int id) {
-        Food foods = null;
+        Food food = null;
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet rs = null;
@@ -97,10 +101,15 @@ public class FoodService implements IFood {
             statement.setInt(1, id);
             rs = statement.executeQuery();
             while (rs.next()) {
-
+                String name = rs.getString("name");
+                double price = rs.getDouble("price");
+                String details = rs.getString("detail");
+                String img_link = rs.getString("img_link");
+                boolean certificate = rs.getBoolean("certificate");
+                boolean is_active = rs.getBoolean("is_active");
+                food = new Food(id, name, price, details, img_link, certificate, is_active);
             }
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -116,17 +125,65 @@ public class FoodService implements IFood {
                 e.printStackTrace();
             }
         }
-        return foods;
+        return food;
     }
 
     @Override
     public boolean update(int id, Food food) {
-        return false;
+        boolean rowUpdated = false;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(UPDATE_FOOD_BY_ID);
+            statement.setString(1,food.getName());
+            statement.setDouble(2,food.getPrice());
+            statement.setString(3,food.getDetail());
+            statement.setString(4,food.getImg_link());
+            statement.setBoolean(5,food.isCertificate());
+            statement.setBoolean(6,food.isIs_active());
+
+            rowUpdated = statement.executeUpdate() > 0;
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowUpdated;
     }
 
     @Override
     public boolean remove(int id) {
-        return false;
+        boolean rowDisable;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = getConnection();
+            statement = connection.prepareStatement(DISABLE_FOOD);
+            statement.setInt(1, id);
+            rowDisable = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) connection.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowDisable;
     }
 
 
