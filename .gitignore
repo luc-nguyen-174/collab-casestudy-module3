@@ -40,4 +40,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+<<<<<<< HEAD
 /src/main/java/com/case_study/casemd3/connect
+=======
+/src/main/java/com/case_study/casemd3/connect/
+/src/main/java/com/case_study/casemd3/connection/
+>>>>>>> tuan
