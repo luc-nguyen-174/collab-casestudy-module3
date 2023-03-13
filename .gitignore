@@ -40,4 +40,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/src/main/java/com/case_study/casemd3/connect/
+/src/main/java/com/case_study/casemd3/connect
