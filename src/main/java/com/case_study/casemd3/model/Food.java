@@ -8,6 +8,7 @@ public class Food {
     private String img_link;
     private boolean certificate = true;
     private boolean is_active = true;
+
     public Food() {
     }
 

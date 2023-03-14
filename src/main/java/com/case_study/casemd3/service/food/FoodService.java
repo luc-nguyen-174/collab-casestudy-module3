@@ -165,16 +165,22 @@ public class FoodService implements IFood {
 
     @Override
     public boolean remove(int id) {
-        boolean rowDisable;
+        boolean rowDisable = false;
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = getConnection();
+            connection.setAutoCommit(false);
             statement = connection.prepareStatement(DISABLE_FOOD);
             statement.setInt(1, id);
             rowDisable = statement.executeUpdate() > 0;
+            connection.commit();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
         } finally {
             try {
                 if (connection != null) connection.close();
