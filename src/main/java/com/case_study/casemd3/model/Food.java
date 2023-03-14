@@ -3,7 +3,6 @@ package com.case_study.casemd3.model;
 public class Food {
     private int id;
     private String name;
-<<<<<<< HEAD
     private double price;
     private String detail;
     private String img_link;
@@ -77,9 +76,4 @@ public class Food {
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
     }
-=======
-    private int price;
-    private String description;
-
->>>>>>> f03a3d9e7ed8a061090425ff4369b77375eaad49
 }

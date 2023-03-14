@@ -19,11 +19,15 @@ public class MerchantService implements IMerchant {
     public static final String INSERT_INTO_MERCHANT;
     public static final String GET_MERCHANT_BY_ID;
     public static final String DELETE_MERCHANT;
+    public static final String DISABLE_MERCHANT;
+    public static final String ENABLE_MERCHANT;
     public static final String UPDATE_MERCHANT;
     static {
         INSERT_INTO_MERCHANT = "insert into merchant (id, name, age, id_number, address_id, phone, email, is_active) values (?, ?, ?, ?, ?, ?, ?, ?)";
         GET_MERCHANT_BY_ID = "SELECT * FROM merchant where id = ?";
-        DELETE_MERCHANT = "UPDATE merchant SET is_active = false WHERE id = ?";
+        DELETE_MERCHANT = "DELETE from merchant WHERE id = ?";
+        DISABLE_MERCHANT = "UPDATE merchant SET is_active = false WHERE id = ?";
+        ENABLE_MERCHANT = "UPDATE merchant SET is_active = true WHERE id = ?";
         SELECT_ALL_MERCHANTS = "CALL select_all_merchants()";
         UPDATE_MERCHANT = "UPDATE merchant SET name = ?, age = ?, id_number = ?, address_id = ?, phone = ?, email = ?, is_active = ? WHERE id = ?";
     }
@@ -44,8 +48,8 @@ public class MerchantService implements IMerchant {
                 String name = res.getString("name");
                 int age = res.getInt("age");
                 String id_number = res.getString("id_number");
-                int province_id = res.getInt("province_id");
-                Address address = addressService.findById(province_id);
+                int address_id = res.getInt("address_id");
+                Address address = addressService.findById(address_id);
                 String phone = res.getString("phone");
                 String email = res.getString("email");
                 boolean is_active = res.getBoolean("is_active");
@@ -186,6 +190,64 @@ public class MerchantService implements IMerchant {
             con = getConnection();
             con.setAutoCommit(false);
             pre = con.prepareStatement(DELETE_MERCHANT);
+            pre.setInt(1, id);
+            rowDeleted = pre.executeUpdate() > 0;
+            con.commit();
+        } catch (SQLException e) {
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (pre != null) pre.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowDeleted;
+    }
+
+    @Override
+    public boolean disable(int id) {
+        boolean rowDeleted = false;
+        Connection con = null;
+        PreparedStatement pre = null;
+        try {
+            con = getConnection();
+            con.setAutoCommit(false);
+            pre = con.prepareStatement(DISABLE_MERCHANT);
+            pre.setInt(1, id);
+            rowDeleted = pre.executeUpdate() > 0;
+            con.commit();
+        } catch (SQLException e) {
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (pre != null) pre.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowDeleted;
+    }
+
+    @Override
+    public boolean enable(int id) {
+        boolean rowDeleted = false;
+        Connection con = null;
+        PreparedStatement pre = null;
+        try {
+            con = getConnection();
+            con.setAutoCommit(false);
+            pre = con.prepareStatement(ENABLE_MERCHANT);
             pre.setInt(1, id);
             rowDeleted = pre.executeUpdate() > 0;
             con.commit();

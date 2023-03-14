@@ -20,4 +20,6 @@ public interface IMerchant extends IGeneric<Merchant> {
 
     @Override
     boolean remove(int id);
+    boolean enable(int id);
+    boolean disable(int id);
 }
