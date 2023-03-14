@@ -5,14 +5,16 @@ public class Merchant extends Login {
     private String name;
     private int age;
     private String id_number;
+    private int address_id;
     private Address address;
     private String phone;
     private String email;
+    private boolean is_active;
 
     public Merchant() {
     }
 
-    public Merchant(int id, String name, int age, String id_number, Address address, String phone, String email) {
+    public Merchant(int id, String name, int age, String id_number, Address address, String phone, String email, boolean is_active) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -20,9 +22,20 @@ public class Merchant extends Login {
         this.address = address;
         this.phone = phone;
         this.email = email;
+        this.is_active = is_active;
+    }
+    public Merchant(int id, String name, int age, String id_number, int address_id, String phone, String email, boolean is_active) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.id_number = id_number;
+        this.address_id = address_id;
+        this.phone = phone;
+        this.email = email;
+        this.is_active = is_active;
     }
 
-    public Merchant(String username, String password, int id, String name, int age, String id_number, Address address, String phone, String email) {
+    public Merchant(String username, String password, int id, String name, int age, String id_number, Address address, String phone, String email, boolean is_active) {
         super(username, password);
         this.id = id;
         this.name = name;
@@ -31,6 +44,7 @@ public class Merchant extends Login {
         this.address = address;
         this.phone = phone;
         this.email = email;
+        this.is_active = is_active;
     }
 
     public int getId() {
@@ -87,5 +101,21 @@ public class Merchant extends Login {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
+
+    public int getAddress_id() {
+        return address_id;
+    }
+
+    public void setAddress_id(int address_id) {
+        this.address_id = address_id;
     }
 }

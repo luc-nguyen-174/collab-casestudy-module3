@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserImpl implements IUser {
-    private final String SELECT_ALL_USERS = "select id, email, name, phone, address_id from user";
-    private final String INSERT = "insert into user(id, email, name, phone, address_id) " +
+    private static final String SELECT_ALL_USERS = "select id, email, name, phone, address_id from user";
+    private static final String INSERT = "insert into user(id, email, name, phone, address_id) " +
             "values(?, ?, ?, ?, ?)";
-    private final String SELECT_USER_BY_ID = "select id, email, name, phone, address_id " +
+    private static final String SELECT_USER_BY_ID = "select id, email, name, phone, address_id " +
             "from user where id = ?";
     @Override
     public List<User> findAll() {

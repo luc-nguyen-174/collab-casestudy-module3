@@ -9,13 +9,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.case_study.casemd3.connect.Connect.getConnection;
+import static com.case_study.casemd3.connect.ConnectDB.getConnection;
 
 public class AddressService implements IAddress {
-    public static final String SELECT_ALL_ADDRESSES = "SELECT * FROM address";
-    public static final String GET_ADDRESS_BY_ID = "SELECT * FROM address where id = ?";
-    public static final String INSERT_INTO_ADDRESS = "insert into address(id, address_name) values(?, ?)";
-    public static final String UPDATE_ADDRESS = "update address set address_name = ? where id = ?";
+    public static final String SELECT_ALL_ADDRESSES;
+    public static final String GET_ADDRESS_BY_ID;
+    public static final String INSERT_INTO_ADDRESS;
+    public static final String UPDATE_ADDRESS;
+    public static final String DELETE_ADDRESS;
+
+    static {
+        SELECT_ALL_ADDRESSES = "SELECT * FROM address";
+        GET_ADDRESS_BY_ID = "SELECT * FROM address where id = ?";
+        INSERT_INTO_ADDRESS = "insert into address(id, address_name) values(?, ?)";
+        UPDATE_ADDRESS = "update address set address_name = ? where id = ?";
+        DELETE_ADDRESS = "delete from address WHERE id = ?";
+    }
 
     @Override
     public List<Address> findAll() {
@@ -142,6 +151,30 @@ public class AddressService implements IAddress {
 
     @Override
     public boolean remove(int id) {
-        return false;
+        boolean rowDeleted = false;
+        Connection con = null;
+        PreparedStatement pre = null;
+        try {
+            con = getConnection();
+            con.setAutoCommit(false);
+            pre = con.prepareStatement(DELETE_ADDRESS);
+            pre.setInt(1, id);
+            rowDeleted = pre.executeUpdate() > 0;
+            con.commit();
+        } catch (SQLException e) {
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            try {
+                if (pre != null) pre.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowDeleted;
     }
 }
